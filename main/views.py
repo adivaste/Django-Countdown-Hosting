@@ -27,7 +27,6 @@ def index(request):
 
         with open("data.json", 'r+') as f:
             json_data = json.load(f)
-            print(json_data, type(json_data))
             json_data[uri] = data_to_write
 
             f.seek(0)
@@ -63,6 +62,5 @@ def timer(request,uri):
       context = { "time" : 0, 'title': timestamp_title, 'status': status }
       if (timeResponse > 0):
             context['time'] = timeResponse
-      print(f'--------{context}---------')
       response = render(request,'main/countdownexpire.html', context)
       return response
