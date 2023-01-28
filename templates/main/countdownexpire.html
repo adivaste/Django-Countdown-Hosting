@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Countdown Expires</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;500;600&family=Inter:wght@300;400;500&family=Martian+Mono:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Poppins:wght@200;300;400;500;600;700&family=Quicksand:wght@400;500;600&family=Work+Sans:wght@300;400;500;600&display=swap"
+            rel="stylesheet">
+      <style>
+            *{
+                  margin : 0;
+                  padding : 0;
+                  box-sizing: border-box;
+                  font-family: 'Work Sans';
+                  color: rgb(23, 23, 23);
+                  font-size: 20px;
+                  font-weight: normal;
+            }
+            span {
+                  color: rgb(23, 23, 23) !important;
+                  font-size: 25px;
+            }
+            .parent{
+                  width: 100vw !important;
+                  height: 100vh !important;
+                  display: flex;
+                  align-items: center;
+                  flex-direction: column;
+                  justify-content: center;
+            }
+            .grey{
+                  color: rgba(75, 75, 75, 0.7) !important;
+            }
+            #clockTimer{
+                  padding:10px;
+            }
+         
+      </style>
+</head>
+
+<body>
+      <div class="parent">
+
+            <div id="clock">⏰</div>
+            <div id="clockTimer">
+                 <span id="hours">24</span><span class="grey">h</span> <span id="minutes">60</span><span class="grey">m</span> <span id="seconds">60</span><span class="grey">s</span> to go
+            </div><br>
+            <div id="title"></div>
+      </div>
+
+
+      <script>
+            var status = false
+           
+            function startTimer(time) {
+                  
+                  var hoursElement = document.getElementById("hours");
+                  var minutesElement = document.getElementById("minutes");
+                  var secondsElement = document.getElementById("seconds");
+                  var clockTimer = document.getElementById("clockTimer");
+                  var clockIcon = document.getElementById("clock");
+                  var titleElement = document.getElementById("title");
+
+                  if (status){
+                        titleElement.textContent = "( {{title}} )"
+                  }
+
+                  var timer = setInterval(function() {
+                      time--;
+                      var hours = Math.floor(time/3600)
+                      var minutes = Math.floor((time - hours*3600)/60)
+                      var seconds =  Math.floor((time - hours*3600 - minutes*60))
+
+                      hoursElement.textContent = hours;
+                      minutesElement.textContent = minutes;
+                      secondsElement.textContent = seconds;
+                      console.log(time)
+                      if (time <= 0) {
+                          clearInterval(timer);
+                          clockTimer.textContent = "Time's Up ⏱️";
+                          clockIcon.textContent = "";
+                      }
+                  }, 1000);
+              }
+              
+            timecount = Number("{{ time }}");
+            countdownElement = document.getElementById("clockTimer");
+            
+            if (isNaN(timecount)) {
+                  countdownElement.innerHTML = "Enter valid value !";
+            } else {
+                  startTimer(timecount);
+            }
+      </script>
+</body>
+
+</html>

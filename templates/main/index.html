@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Countdown timer</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;500;600&family=Inter:wght@300;400;500&family=Martian+Mono:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Poppins:wght@200;300;400;500;600;700&family=Quicksand:wght@400;500;600&family=Work+Sans:wght@300;400;500;600&display=swap"
+            rel="stylesheet">
+      <style>
+            * {
+                  margin: 0;
+                  padding: 0;
+                  box-sizing: border-box;
+            }
+
+            body {
+                  font-family: 'Work sans';
+            }
+
+            #form {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  justify-content: center;
+            }
+
+            input,
+            label {
+                  padding: 5px;
+                  font-family: 'Work sans';
+                  border: 1.5px solid black;
+                  border-radius: 5px;
+                  margin: 5px;
+                  font-size: 16px;
+            }
+
+            input {
+                  cursor: pointer;
+            }
+
+            .title {
+                  font-size: 26px;
+                  text-align: center;
+                  padding: 10px;
+                  font-weight: 500;
+                  margin: 20px 0px;
+            }
+
+            #submit {
+                  text-align: center;
+                  margin: 20px;
+                  cursor: pointer;
+            }
+
+            .parent {
+                  width: 100vw !important;
+                  height: 100vh !important;
+                  display: flex;
+                  align-items: center;
+                  flex-direction: column;
+                  justify-content: center;
+            }
+
+            .titleBlock {
+                  display: flex;
+                  align-items: flex-start;
+                  flex-direction: row;
+                  justify-content: left;
+            }
+            .uriResponse{
+                  text-decoration: underline;
+                  cursor: pointer;
+            }
+            a{
+                  text-decoration: none;
+                  text-decoration: underline;
+                  color: black;
+
+            }
+      </style>
+</head>
+
+<body>
+      <div class="parent">
+            <div class="title"> Set the Countdown⌛</div>
+
+            <div class="titleBlock">
+                  <label for="title">Title : </label>
+                  <input type='text' id="title" name="title">
+            </div>
+            <form id="form">
+                  <label for="date">Date : </label>
+                  <input type="date" id="date" name="date">
+                  <br>
+                  <label for="time">Time : </label>
+                  <input type="time" id="time" name="time">
+                  <br>
+            </form>
+
+            <input id="submit" type="button" value=" Submit " onclick="submitForm()">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <a class="redirectURL" href=""></a>
+      </div>
+
+      <script>
+
+            var csrf_token = '0'
+            window.onload = function () {
+                  csrf_token = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+                  console.log(csrf_token);
+            }
+            function submitForm() {
+                  var date = document.getElementById("date").value;
+                  var time = document.getElementById("time").value;
+                  var title = document.getElementById("title").value;
+
+                  var dateTime = new Date(date + " " + time);
+                  var timestamp = dateTime.getTime()/1000;
+
+                  const data = {
+                        'title': title,
+                        'timestamp': timestamp
+                  };
+
+                  function displayURL(a){
+                        var fullURL = window.location.href + 'timer/' + a.uri
+                        redirectURLElement  = document.getElementsByClassName('redirectURL')[0];
+                        redirectURLElement.innerHTML = fullURL;
+                        redirectURLElement.setAttribute('href', fullURL);
+                  }
+
+                  fetch(window.location.href, {
+                        method: 'POST',
+                        headers: {
+                              'Content-Type': 'application/json',
+                              'X-CSRFToken': csrf_token
+                        },
+                        body: JSON.stringify(data)
+                  })
+                        .then(response => response.json())
+                        .then(data => displayURL(data))
+                        .catch(error => console.error(error));
+                        
+            }
+
+
+
+
+      </script>
+</body>
+
+</html>
